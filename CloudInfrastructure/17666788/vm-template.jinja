@@ -1,0 +1,22 @@
+resources:
+- name: {{ env["name"] }}
+  type: compute.v1.instance
+  properties:
+    zone: {{ properties["zone"] }}
+    machineType: https://www.googleapis.com/compute/v1/projects/cmp3747m-marshall-17666788/zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-9-stretch-v20180105
+    networkInterfaces:
+    - network: $(ref.{{ properties["network"] }}.selfLink)
+      subnetwork: $(ref.{{ properties["subnetwork"] }}.selfLink)
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+
+
+# https://github.com/GoogleCloudPlatform/deploymentmanager-samples/blob/master/examples/v2/step_by_step_guide/step7_use_environment_variables/jinja/vm-template.jinja

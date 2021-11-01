@@ -1,0 +1,43 @@
+{% set  NETWORK_NAME = "network-sme" %}
+{% set  SUBNETWORK_NAME_N = "subnetwork-eu" %}
+{% set  SUBNETWORK_NAME = "subnetwork-uk" %}
+
+resources:
+# Here is where the virtual machines are made, using the vm template
+- name: vm-one
+  type: vm-template.jinja
+  properties:
+    machineType: f1-micro
+    zone: europe-west2-a # this defines the zone/ region this region being london/uk
+    network: {{ NETWORK_NAME }} # This defines what network the vm should run off of
+    subnetwork: {{ SUBNETWORK_NAME }} # This defines which of the two subnets it should use
+- name: vm-two
+  type: vm-template.jinja
+  properties:
+    machineType: g1-small
+    zone: europe-north1-a
+    network: {{ NETWORK_NAME }}
+    subnetwork: {{ SUBNETWORK_NAME_N }}
+# Here is where the network is made using the network template
+- name: {{ NETWORK_NAME }}
+  type: network.jinja
+# Here is where the firewall is made using the firewall template
+- name: {{ NETWORK_NAME }}-firewall
+  type: firewall.jinja
+  properties:
+    network: {{ NETWORK_NAME }} # This assigns the firewall to this network
+# Here is where the subnetworks are made using the subnetwork template
+- name: subnetwork-uk
+  type: subnetwork.jinja
+  properties:  
+    ipCidrRange: 192.168.1.0/24
+    network: {{ NETWORK_NAME }} 
+    region: europe-west2
+- name: subnetwork-eu
+  type: subnetwork.jinja
+  properties:  
+    ipCidrRange: 10.240.0.0/24
+    network: {{ NETWORK_NAME }}
+    region: europe-north1
+
+# https://github.com/GoogleCloudPlatform/deploymentmanager-samples/blob/master/examples/v2/step_by_step_guide/step7_use_environment_variables/jinja/compute-engine-template.jinja

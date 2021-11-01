@@ -1,0 +1,17 @@
+# The imports are all the jinja files that get referenced, even ones that are referenced within other files
+imports:
+- path: vm-template.jinja
+- path: sql-template.jinja
+- path: network.jinja
+- path: firewall.jinja
+- path: subnetwork.jinja
+- path: network-firewall-main.jinja
+
+# In resources are the jinja files that the yaml file deploys
+# the firewall, network and subnetwork are all deployed within the network-firewall-main file 
+
+resources:
+- name: network-firewall-setup
+  type: network-firewall-main.jinja
+- name: sql-template
+  type: sql-template.jinja

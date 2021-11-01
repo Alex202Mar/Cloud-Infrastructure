@@ -1,0 +1,25 @@
+{% set deployment_name = env['deployment']  %}
+{% set instance_name = deployment_name + '-instance4'  %}
+# SQL instance names are reserved for up to a week after being deleted keep in mind when deleting and recreating deployment
+{% set database_name = deployment_name + '-db'  %}
+{% set region = 'europe-west2'  %}
+{% set tier = 'db-n1-standard-1'  %}
+# the above code just gives names to the placeholders below
+
+resources:
+- name: {{ instance_name }}
+  type: gcp-types/sqladmin-v1beta4:instances
+  properties:
+    region: {{ region }}
+    settings:
+      tier: {{ tier }}
+      backupConfiguration:
+        binaryLogEnabled: true
+        enabled: true
+
+- name: {{ database_name }}
+  type: gcp-types/sqladmin-v1beta4:databases
+  properties:
+    name: {{ database_name }}
+    instance: $(ref.{{ instance_name }}.name)
+    charset: utf8

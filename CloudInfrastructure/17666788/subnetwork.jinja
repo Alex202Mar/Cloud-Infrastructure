@@ -1,0 +1,8 @@
+resources:
+- name: {{ env["name"] }}
+  type: compute.v1.subnetwork
+  properties:
+    ipCidrRange: {{ properties["ipCidrRange"] }}
+    network: $(ref.{{ properties["network"] }}.selfLink)
+    region: {{ properties["region"] }}
+# The parameters of the subnetwork are defined here

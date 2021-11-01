@@ -1,0 +1,10 @@
+resources:
+- name: {{ env["name"] }}
+  type: compute.v1.network
+  properties:
+    routingConfig:
+      routingMode: GLOBAL
+    autoCreateSubnetworks: false
+
+# The parameters of the network are defined here
+# https://github.com/GoogleCloudPlatform/deploymentmanager-samples/blob/master/examples/v2/step_by_step_guide/step7_use_environment_variables/jinja/network-template.jinja
